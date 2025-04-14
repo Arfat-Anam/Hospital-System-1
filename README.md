@@ -1,39 +1,86 @@
-# 🏥 Hospital Management System (Python Project)
 
-This is a basic hospital management system using **Object-Oriented Programming (OOP)** in Python.  
-It allows you to **add patients and doctors**, **book appointments**, **view schedules**, and **cancel bookings**.
 
----
+class Patient:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
-## 📌 Features
+class Doctor:
+    def __init__(self, name, specialty):
+        self.name = name
+        self.specialty = specialty
 
-- Add new patients with name and age
-- Add doctors with name and specialty
-- Book appointments between patients and doctors
-- Cancel appointments by patient name and date
-- View all scheduled appointments
+class Appointment:
+    def __init__(self, patient, doctor, date):
+        self.patient = patient
+        self.doctor = doctor
+        self.date = date
 
----
+class HospitalManagementSystem:
+    def __init__(self):
+        self.patients = []
+        self.doctors = []
+        self.appointments = []
 
-## ▶️ How to Run
+    def add_patient(self, name, age):
+        patient = Patient(name, age)
+        self.patients.append(patient)
+        print(f"Patient '{name}' added successfully.")
 
-1. Make sure you have Python installed (version 3.x)
-2. Copy the code into a file named `hospital_system.py`
-3. Run it using the terminal or command prompt:
+    def add_doctor(self, name, specialty):
+        doctor = Doctor(name, specialty)
+        self.doctors.append(doctor)
+        print(f"Doctor '{name}' added successfully.")
 
-```bash
-python hospital_system.py
-Doctor 'Ali' added successfully.
-Doctor 'Fatima' added successfully.
-Patient 'Ahmed' added successfully.
-Patient 'Zara' added successfully.
-Appointment booked for Ahmed with Dr. Ali on 2024-04-10.
-Appointment booked for Zara with Dr. Fatima on 2024-04-12.
+    def book_appointment(self, patient_name, doctor_name, date_str):
+        date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        patient = next((p for p in self.patients if p.name == patient_name), None)
+        doctor = next((d for d in self.doctors if d.name == doctor_name), None)
 
-Scheduled Appointments:
-- 2024-04-10 | Ahmed with Ali
-- 2024-04-12 | Zara with Fatima
+        if not patient:
+            print(f"Patient '{patient_name}' not found.")
+            return
+        if not doctor:
+            print(f"Doctor '{doctor_name}' not found.")
+            return
 
-Appointment for Ahmed on 2024-04-10 cancelled.
-Scheduled Appointments:
-- 2024-04-12 | Zara with Fatima
+        appointment = Appointment(patient, doctor, date)
+        self.appointments.append(appointment)
+        print(f"Appointment booked for {patient.name} with Dr. {doctor.name} on {date}.")
+
+    def cancel_appointment(self, patient_name, date_str):
+        date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        for appointment in self.appointments:
+            if appointment.patient.name == patient_name and appointment.date == date:
+                self.appointments.remove(appointment)
+                print(f"Appointment for {patient_name} on {date} cancelled.")
+                return
+        print(f"No appointment found for {patient_name} on {date}.")
+
+    def view_appointments(self):
+        if not self.appointments:
+            print("No appointments scheduled.")
+        else:
+            print("\nScheduled Appointments:")
+            for appt in self.appointments:
+                print(f"- {appt.date} | {appt.patient.name} with Dr. {appt.doctor.name}")
+
+
+# Example Usage
+if __name__ == "__main__":
+    hms = HospitalManagementSystem()
+
+    hms.add_doctor("Ali", "Cardiologist")
+    hms.add_doctor("Fatima", "Dermatologist")
+
+    hms.add_patient("Ahmed", 30)
+    hms.add_patient("Zara", 25)
+
+    hms.book_appointment("Ahmed", "Ali", "2024-04-10")
+    hms.book_appointment("Zara", "Fatima", "2024-04-12")
+
+    hms.view_appointments()
+
+    hms.cancel_appointment("Ahmed", "2024-04-10")
+    hms.view_appointments()
+

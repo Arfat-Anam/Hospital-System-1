@@ -1,7 +1,7 @@
 # 🏥 Hospital Management System (Python Project)
 
 This is a basic hospital management system using **Object-Oriented Programming (OOP)** in Python.  
-It allows you to **add patients and doctors**, **book appointments**, **view schedules**, and **cancel bookings**.
+This system allows you to **add patients and doctors**, **book appointments**, **view schedules**, and **cancel bookings** when necessary.
 
 ---
 
